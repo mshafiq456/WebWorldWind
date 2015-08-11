@@ -25,7 +25,7 @@ function createPlaceMarks(wwd, earthQuakes )
 
 
     // Set up the common placemark attributes.
-    placemarkAttributes.imageScale = 2;
+    placemarkAttributes.imageScale = 0.25;
     placemarkAttributes.imageOffset = new WorldWind.Offset(
         WorldWind.OFFSET_FRACTION,0.5,
         WorldWind.OFFSET_FRACTION, 0.5);
@@ -50,7 +50,7 @@ function createPlaceMarks(wwd, earthQuakes )
 
         // Create the placemark and its label.
         placemark = new WorldWind.Placemark(
-            new WorldWind.Position(earthQuakes[i].latitude, earthQuakes[i].longitude, 1e2), true, null);
+            new WorldWind.Position(earthQuakes[i].latitude, earthQuakes[i].longitude, 1e2), false, null);
 
 
         //This label will appear right on top of the circle object
@@ -73,7 +73,7 @@ function createPlaceMarks(wwd, earthQuakes )
         // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
         // the default highlight attributes so that all properties are identical except the image scale.
         highlightAttributes = new WorldWind.PlacemarkAttributes(placemarkAttributes);
-        highlightAttributes.imageScale = 3;
+        highlightAttributes.imageScale = 0.5;
         placemark.highlightAttributes = highlightAttributes;
 
         // Add the placemark to the layer.
