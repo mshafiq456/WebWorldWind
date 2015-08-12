@@ -10,10 +10,29 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+    <!-- Add bootstrap Slider Libraries -->
+    <link rel="stylesheet" href="./stylesheets/bootstrapSlider.min.css">
+    <script src="bootstrapSlider.js" type="text/javascript"></script>
+
     <!-- Include the Web World Wind library. -->
     <script src="http://worldwindserver.net/webworldwind/worldwindlib.js" type="text/javascript"></script>
     <script src="UGSDataRetriever.js" type="text/javascript"></script>
     <script src="PlacemarksAndPicking.js" type="text/javascript"></script>
+
+    <style>
+
+
+        #magnitudeSlider .slider-selection {
+            background: #BABABA;
+        }
+
+        #ex1Slider .slider-selection {
+            background: #BABABA;
+        }
+
+
+
+    </style>
 
 </head>
 <body>
@@ -26,8 +45,29 @@
 
     <div class="row">
         <div class="col-md-3">
-            <h3>Info:  </h3>
+            <h3>Information</h3>
             <p id="information"></p>
+
+            <h3>MinMag</h3>
+            <div id="minMag">
+
+
+
+                <input id="magnitudeSlider"
+                       data-slider-id="magnitudeSlider"
+                       type="number"
+                       data-slider-min="2"
+                       data-slider-max="7"
+                       data-slider-step="1"
+                       data-slider-value="2"/>
+
+
+
+
+            </div>
+
+            <h4 id="checking"></h4>
+
         </div>
         <div class="col-md-9">
 
@@ -47,8 +87,25 @@
 
 
 <script>
+
+
+    // instantiate the slider
+    var slider = new Slider('#magnitudeSlider', {
+        formatter: function(value) {
+            return 'Current value: ' + value;
+        }
+    });
+
+    slider.on('slideStop',function(sliderValue){
+        document.getElementById("checking").innerHTML =Number(sliderValue);
+        //TODO: Now here we need to call the earthquake function to only display earthquakes greater than sliderValue
+
+    });
+
+
     // Register an event listener to be called when the page is loaded.
     window.addEventListener("load", eventWindowLoaded, false);
+
 
     // Define the event listener to initialize Web World Wind.
     function eventWindowLoaded() {
@@ -77,6 +134,8 @@
         createPlaceMarks(wwd, earthQuakes);
 
     }
+
+
 </script>
 
 </body>
