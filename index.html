@@ -96,11 +96,7 @@
         }
     });
 
-    slider.on('slideStop',function(sliderValue){
-        document.getElementById("checking").innerHTML =Number(sliderValue);
-        //TODO: Now here we need to call the earthquake function to only display earthquakes greater than sliderValue
 
-    });
 
 
     // Register an event listener to be called when the page is loaded.
@@ -133,6 +129,28 @@
         var earthQuakes =  EarthQuakeRetrieval();
         createPlaceMarks(wwd, earthQuakes);
 
+
+        slider.on('slideStop',function(arg){
+            var newearthquakelist = [];
+            for(var i = 0; i < earthQuakes.length; i++)
+            {
+                if(earthQuakes[i].magnitude >= arg)
+                {
+                    newearthquakelist.push(earthQuakes[i]);
+                }
+            }
+            var oldPlacemarks;
+            for(var i = 0; i< wwd.layers.length; i++)
+            {
+                if(wwd.layers[i].displayName == "Placemarks")
+                {
+                    oldPlacemarks = wwd.layers[i];
+                }
+            }
+            wwd.removeLayer(oldPlacemarks);
+            createPlaceMarks(wwd, newearthquakelist);
+
+        });
     }
 
 
