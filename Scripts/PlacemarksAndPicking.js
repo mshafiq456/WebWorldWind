@@ -18,7 +18,11 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js','UGSDataRetrie
 
     function createPlaceMarks(wwd, earthQuakes) {
         //Display the data in information center for the latest earthquake by default
-        document.getElementById("information").innerHTML = this.getInformationToDisplay(earthQuakes[0]);
+        var latestEarthQuakeInfo = this.getInformationToDisplay(earthQuakes[0]);
+
+        document.getElementById("information").innerHTML = latestEarthQuakeInfo;
+
+
 
         // Define the images we'll use for the placemarks.
         var images = [

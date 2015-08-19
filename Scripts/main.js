@@ -29,6 +29,15 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
     // Register an event listener to be called when the page is loaded.
     window.addEventListener("load", eventWindowLoaded, false);
 
+    var cb = new Codebird;
+
+    cb.setConsumerKey("VddGNUN9GWxbbKBoHDzhNRjjo","noC4s8BEKQCu4gZoXx2E13CYWzbA7gUjL9dM35IwJLtErfKTjb");
+    cb.setToken("3416857132-Fv8A8BIrbb7OGYoUODrfDb8bDvqhu1OBbusFzgj","24qSgQIOfVBWiSudRI1GX9EivqrneqOqlG3c42gdA20Ny");
+
+
+
+
+
 
 // Define the event listener to initialize Web World Wind.
     function eventWindowLoaded() {
@@ -56,7 +65,19 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
          var layerManager= new LayerManager(wwd);
 
         var earthQuakes =  new EarthQuakeRetrieval();
-        new createPlaceMarks(wwd, earthQuakes);
+        var placeMark = new createPlaceMarks(wwd, earthQuakes);
+
+        var params = {
+            status: placeMark.getInformationToDisplay(earthQuakes[0])
+        };
+        cb.__call(
+            "statuses_update",
+            params,
+            function (reply) {
+                //Currently we don't need to do anything with the reply received from twitter in JSON format.
+                console.log(reply);
+            }
+        );
 
         slider.on('slideStop', function (arg) {
             var newearthquakelist = [];
@@ -72,7 +93,9 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
                 }
             }
             wwd.removeLayer(oldPlacemarks);
-             new createPlaceMarks(wwd, newearthquakelist);
+            new createPlaceMarks(wwd, newearthquakelist);
+
+
 
         });
     }

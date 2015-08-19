@@ -59,6 +59,8 @@ define(function() {
                 longitude: Number(geometry['coordinates'][0])
             };
 
+            if(earthquake.magnitude <2.0) continue;
+
             // How long ago the earthquake occurred in terms of days
             earthquake.ageDay = Math.floor(Math.abs((new Date().getTime()) - new Date(earthquake.date_time).getTime()) /
                 (24 * 60 * 60 * 1000));
