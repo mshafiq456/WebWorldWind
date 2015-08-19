@@ -239,7 +239,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js','UGSDataRetrie
                 timeString = timeString + "<br>" + earthquake.ageSeconds +
                     ((earthquake.ageSeconds > 1 ) ? "  seconds ago " : "  second ago");
             }
-
+         timeString += "<br> Depth : " + earthquake.depth + " kilometers";
 
             return timeString;
         }
