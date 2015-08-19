@@ -10,7 +10,10 @@
 
 //Note: LayerManager.js is part of www API.
 
-define(['http://worldwindserver.net/webworldwind/examples/LayerManager.js','UGSDataRetriever','PlacemarksAndPicking'],function(LayerManager,EarthQuakeRetrieval,createPlaceMarks)
+define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
+    'http://worldwindserver.net/webworldwind/examples/LayerManager.js',
+    'UGSDataRetriever',
+    'PlacemarksAndPicking'],function(ww,LayerManager,EarthQuakeRetrieval,createPlaceMarks)
 {
     'use strict';
 
@@ -34,10 +37,10 @@ define(['http://worldwindserver.net/webworldwind/examples/LayerManager.js','UGSD
 
         // Add some image layers to the World Window's globe.
         var layers = [
-            {layer: new WorldWind.BMNGLayer(), enabled: true},
+            {layer: new WorldWind.BMNGLayer(), enabled: false},
             {layer: new WorldWind.BMNGLandsatLayer(), enabled: false},
             {layer: new WorldWind.BingAerialLayer(null), enabled: false},
-            {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: false},
+            {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true},
             {layer: new WorldWind.BingRoadsLayer(null), enabled: false},
             {layer: new WorldWind.CompassLayer(), enabled: true},
             {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},
@@ -54,7 +57,6 @@ define(['http://worldwindserver.net/webworldwind/examples/LayerManager.js','UGSD
 
         var earthQuakes =  new EarthQuakeRetrieval();
         new createPlaceMarks(wwd, earthQuakes);
-
 
         slider.on('slideStop', function (arg) {
             var newearthquakelist = [];
