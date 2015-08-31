@@ -29,24 +29,72 @@
         #magnitudeSlider .slider-selection {
             background: #337ab7;
         }
+        #ageSlider .slider-selection {
+            background:#337ab7 ;
+        }
+
+        body{
+            color: #BABABA;
+        }
+
     </style>
 
 </head>
-<body>
+<body background="Images/NASA_stars.jpg">
 
-<div class="container">
-    <div class="jumbotron" style="background:#337ab7"  >
-        <h1 style="text-align:center">Earthquake Viewer</h1>
+
+
+<div class="container" >
+
+    <div class="jumbotron" style="background:#337ab7" >
+        <img title="NASA" src="Images/nasa_logo_3d.png" style="float: left; padding-right: 1px;  width: 12% !important;
+  height: 12% !important;">
+        <h2 style="text-align:left">JavaScript Earthquake Viewer With WebWorldWind Interface</h2>
 
     </div>
 
+
+
+
+    <!--
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <h3>
+                Destination:
+            </h3>
+        </div>
+        <div class="col-md-10">
+
+            <div class="input-group" id="searchBox">
+                <input type="text" class="form-control" placeholder="Place to Go To" id="searchText"/>
+                            <span class="input-group-btn">
+                                <button id="searchButton" class="btn btn-info" type="button">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="row">
+        <div class="col-md-3" >
             <h3>Information</h3>
             <p id="information"></p>
 
+            <h3>Data Format</h3>
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <button id ="layer3D" type="button" class="btn btn-info">3D</button>
+                </div>
+                <div class="btn-group">
+                    <button id = "layer2D" type="button" class="btn btn-info" >2D</button>
+                </div>
 
-            <h3>MinMag</h3>
+            </div>
+
+
+
+            <h3>Minimum Magnitude</h3>
             <div id="minMag">
 
                 <input id="magnitudeSlider"
@@ -56,6 +104,19 @@
                        data-slider-max="8"
                        data-slider-step="1"
                        data-slider-value="2"/>
+
+            </div>
+
+            <h3>Maximum Age</h3>
+            <div id="minAge">
+
+                <input id="ageSlider"
+                       data-slider-id="ageSlider"
+                       type="number"
+                       data-slider-min="4"
+                       data-slider-max="80"
+                       data-slider-step="4"
+                       data-slider-value="80"/>
 
             </div>
 
@@ -75,15 +136,19 @@
             <br>
 
             <!-- Goto Search Box -->
+
+
             <h4>Destination</h4>
             <div class="input-group" id="searchBox">
                 <input type="text" class="form-control" placeholder="Place to Go To" id="searchText"/>
-                <span class="input-group-btn">
-                    <button id="searchButton" class="btn btn-primary" type="button">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </span>
+                        <span class="input-group-btn">
+                            <button id="searchButton" class="btn btn-info" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
             </div>
+
+
 
         </div>
         <div class="col-md-9">
