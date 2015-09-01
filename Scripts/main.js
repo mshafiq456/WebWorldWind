@@ -28,9 +28,9 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
         var ageSlider = new Slider('#ageSlider', {
            formatter: function (value){
                if(value != 80)
-                    return  value + 'hours';
+                    return  value + ' hours';
                else
-                return "All Available Data"
+                return "Show All Available Data"
            }
         });
 
