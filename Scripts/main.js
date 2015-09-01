@@ -92,7 +92,6 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
             params,
             function (reply) {
                 //Currently we don't need to do anything with the reply received from twitter in JSON format.
-                console.log(reply);
             }
         );
 
@@ -108,7 +107,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
     }
 
     /*   -----------------------------------------------------------------------
-     @Description: This function will be called whenever user modifies either of the slider
+     @Description: This function will be called whenever user modifies either of the slider on main page
       It retrieves the new values for the slider and modifies the content displayed on globe according
       to those values.
 
