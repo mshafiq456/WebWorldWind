@@ -101,15 +101,15 @@ define(function() {
      --------------------------------------------------------------------------------*/
 
 
-    EarthQuakeRetrieval.prototype.getColor = function(time, transparent) {
+    EarthQuakeRetrieval.prototype.getColor = function(timeHours, transparent) {
         if (!transparent) {
 
             // If the earthquake happened less than 12 hours ago, then draw RED
-            if (new Date().getTime() - time < 1000 * 60 * 60 * 24)
+            if (Number(timeHours) < 24)
                 return WorldWind.Color.RED;
 
             //if earthquake happened less than 24 hours ago, then Draw Yello
-            else if (new Date().getTime() - time < 1000 * 60 * 60 * 48)
+            else if (Number(timeHours) < 48)
                 return WorldWind.Color.YELLOW;
             else
             // Else draw Green
@@ -117,11 +117,11 @@ define(function() {
         }
         else {
             // If the earthquake happened less than 12 hours ago, then draw transparent RED
-            if (new Date().getTime() - time < 1000 * 60 * 60 * 24)
+            if (Number(timeHours) < 24)
                 return new WorldWind.Color(1, 0, 0, 0.5);
 
             //if earthquake happened less than 24 hours ago, then Draw transparent Yellow
-            else if (new Date().getTime() - time < 1000 * 60 * 60 * 48)
+            else if (Number(timeHours) < 48)
                 return new WorldWind.Color(1, 1, 0, 0.5);
             else
             // Else draw transparent Green

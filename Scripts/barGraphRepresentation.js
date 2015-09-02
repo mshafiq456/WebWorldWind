@@ -31,8 +31,8 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js','UGSDataRetrie
         for (var i = 0; i < earthQuakes.length; i++) {
 
             var height = Number(earthQuakes[i].magnitude) * 2.5 - 3;
-            var colorNonTransparent = EarthQuakeRetrieval.prototype.getColor(earthQuakes[i].date_time, false);
-            var colorTransparent = EarthQuakeRetrieval.prototype.getColor(earthQuakes[i].date_time, true);
+            var colorNonTransparent = EarthQuakeRetrieval.prototype.getColor(earthQuakes[i].ageHours, false);
+            var colorTransparent = EarthQuakeRetrieval.prototype.getColor(earthQuakes[i].ageHours, true);
 
             // Define an outer boundary to make a polygon.
             var boundaries = [];

@@ -93,7 +93,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js','UGSDataRetrie
             placemarkAttributes.imageScale = 0.100 + Number(earthQuakes[i].magnitude)/100 * 1.5;
 
             //set the color to nontransparent image color based on how long ago was the earthquake
-            placemarkAttributes.imageColor = EarthQuakesRetrieval.prototype.getColor(earthQuakes[i].date_time, false);
+            placemarkAttributes.imageColor = EarthQuakesRetrieval.prototype.getColor(earthQuakes[i].ageHours, false);
             placemark.attributes = placemarkAttributes;
 
             // Create the highlight attributes for this placemark. Note that the normal attributes are specified as
