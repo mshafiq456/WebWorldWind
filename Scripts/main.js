@@ -3,9 +3,9 @@
  */
 
 /*
-* This main file should always be called from the main HTML file AFTER the webworldwind library has been loaded.
-* This takes LayerManger, UGSDataRetriever, and PlacemarksAndPicking as a dependency.
-* Thus the script inside the module is only loaded after all the dependencies have finished loading.
+ * This main file should always be called from the main HTML file AFTER the webworldwind library has been loaded.
+ * This takes LayerManger, UGSDataRetriever, and PlacemarksAndPicking as a dependency.
+ * Thus the script inside the module is only loaded after all the dependencies have finished loading.
  */
 
 //Note: LayerManager.js is part of www API.
@@ -19,20 +19,20 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
     'use strict';
 
     // instantiate the sliders
-        var magnitudeSlider = new Slider('#magnitudeSlider', {
-            formatter: function (value) {
-                return 'Current value: ' + value;
-            }
-        });
+    var magnitudeSlider = new Slider('#magnitudeSlider', {
+        formatter: function (value) {
+            return 'Current value: ' + value;
+        }
+    });
 
-        var ageSlider = new Slider('#ageSlider', {
-           formatter: function (value){
-               if(value != 80)
-                    return  value + ' hours';
-               else
+    var ageSlider = new Slider('#ageSlider', {
+        formatter: function (value){
+            if(value != 80)
+                return  value + ' hours';
+            else
                 return "Show All Available Data"
-           }
-        });
+        }
+    });
 
     var wwd;    // This will be the global WorldWindow Object
 
@@ -80,7 +80,22 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
         var earthQuakes =  new EarthQuakeRetrieval();
         var placeMark = new createPlaceMarks(wwd, earthQuakes);
         var barGraph = new barGraphRepresentation(wwd, earthQuakes);
+        var previousStatus = "";
 
+        ///
+        ///
+        ///
+        ///Turn this into a function
+
+        makeTwitterCalls(cb, earthQuakes, previousStatus, placeMark);
+
+
+        ///Timer function----------------
+        //
+        // window.setInterval(updateTimerEvent, 3000);
+        setInterval(function () {
+            earthQuakes = updateTimerEvent(earthQuakes, placeMark, (cb = new Codebird()), previousStatus)
+        }, 300000);
 
 
 
@@ -108,8 +123,8 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
 
     /*   -----------------------------------------------------------------------
      @Description: This function will be called whenever user modifies either of the slider on main page
-      It retrieves the new values for the slider and modifies the content displayed on globe according
-      to those values.
+     It retrieves the new values for the slider and modifies the content displayed on globe according
+     to those values.
 
      @Param: NONE
      @return:  NONE
@@ -145,7 +160,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
             var ageCondition = layerPlacemarks.renderables[i].ageInHours <= maxAge;
 
             // A certain renderable is enabled if its magnitude value is greater or equal to the slider value
-                // AND its ageInHours is less than or equal the maximum age selected by user
+            // AND its ageInHours is less than or equal the maximum age selected by user
             layerPlacemarks.renderables[i].enabled = ( magnitudeCondition && ageCondition);
 
         }
@@ -156,7 +171,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
             var ageCondition = layer3DGraphData.renderables[i].ageInHours <= maxAge;
 
             // A certain renderable is enabled if its magnitude value is greater or equal to the slider value
-                // AND its ageInHours is less than or equal the maximum age selected by user
+            // AND its ageInHours is less than or equal the maximum age selected by user
 
             layer3DGraphData.renderables[i].enabled = ( magnitudeCondition && ageCondition)
 
@@ -168,7 +183,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
 
     /*   -----------------------------------------------------------------------
      @Description: This function will be called when user clicks on "3D" data view option
-         This function will disable "Placemark" layer, and will enable "3D EarthQuake View" layer
+     This function will disable "Placemark" layer, and will enable "3D EarthQuake View" layer
 
      @Param: NONE
      @return:  NONE
@@ -209,6 +224,136 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
         }
 
     }
+
+    /*   -----------------------------------------------------------------------
+     @Description: This is the program that controls the refreshing rate
+     of the earthquake events that have been logged by USGS.  They are set for every 5 minutes.
+     This will tweet all new earthquakes in the last update in the order they were reported.
+
+     @Param: NONE
+     @return:  NONE
+
+     --------------------------------------------------------------------------------*/
+    function updateTimerEvent(earthQuakes, placeMark, cb, previousStatus) { //every 5 minutes check earthquakes
+        'use strict';
+
+        var updatedEarthQuakes = new EarthQuakeRetrieval();
+
+        var indexofpreviousRecent = -1;
+        var i = 0;
+
+        while (indexofpreviousRecent == -1) {
+            if ((earthQuakes[0].title != updatedEarthQuakes[i].title) && (earthQuakes[0].depth != updatedEarthQuakes[i].depth) && (earthQuakes[0].magnitude != updatedEarthQuakes[i].magnitude)) {
+                i++
+            }
+            else {
+                indexofpreviousRecent = i;
+            }
+
+        }
+
+        earthQuakes = updatedEarthQuakes;
+        if (indexofpreviousRecent != 0 && indexofpreviousRecent != -1) { //if the earthquakes are different check the latest tweet
+
+
+            cb.setConsumerKey("uKcQjCqAFKtJv6VRbFAk8LcK1", "WIBTA95zIhYGcAvfEJPJsVQxbaEN64aK1x2csx1wJKjqhx5xlh");
+            cb.setToken("3416857132-Fv8A8BIrbb7OGYoUODrfDb8bDvqhu1OBbusFzgj", "24qSgQIOfVBWiSudRI1GX9EivqrneqOqlG3c42gdA20Ny");
+
+            cb.__call(
+                "account_verifyCredentials",
+                {},
+                function (reply) {  //get the account and see what last tweet was
+                    previousStatus = reply.status.text;
+
+                    earthQuakes = updatedEarthQuakes;
+                    for (var i = indexofpreviousRecent - 1; i >= 0; i--) //for each new earthquake check to see if it was the last tweet
+                    {
+                        if ((previousStatus.indexOf(updatedEarthQuakes[i].title) < 0) && (previousStatus.indexOf("Depth : " + updatedEarthQuakes[i].depth + "kilometers") < 0) && (previousStatus.indexOf(" M " + updatedEarthQuakes[i].magnitude.toPrecision(2)) < 0)) {
+                            var params = {
+                                status: placeMark.getTweetText(updatedEarthQuakes[i])
+                            };
+
+                            cb.__call(
+                                "statuses_update",
+                                params,
+                                function (reply) {
+                                    //Currently we don't need to do anything with the reply received from twitter in JSON format.
+                                    console.log(reply);
+                                }
+                            );
+
+                        }
+                    }
+
+                    placeMark = new createPlaceMarks(wwd, earthQuakes);
+                    wwd.redraw();
+                    console.log(reply); //reply from getting the user information
+                }
+            );
+
+        }
+        return earthQuakes;
+    }
+
+//end of timer-----------
+
+///Description -
+/// This function will make all of the initial twitter calls to check last tweet and
+/// if the current most-recent is not the same as the last tweet,
+/// tweet the earthquake obtained from the initialization of the session
+///
+    function makeTwitterCalls(cb, earthQuakes, previousStatus, placeMark) {
+        var NASAuser;
+        cb.__call(
+            "account_verifyCredentials",
+            {},
+            function (reply) {  //get the account and see what last tweet was
+                NASAuser = reply;
+                previousStatus = reply.status.text;
+                var sx = previousStatus.toString().indexOf("&lt;!&gt;");
+
+                if ((previousStatus.toString().indexOf(earthQuakes[0].title) < 0) && (previousStatus.toString().indexOf("Depth : " + earthQuakes[0].depth + "kilometers") < 0) && (previousStatus.toString().indexOf(" M " + earthQuakes[0].magnitude.toString()) < 0)) {
+                    var i = 0,
+                        indexofpreviousTweet = -1;
+                    while (indexofpreviousTweet == -1 && i < earthQuakes.length) {
+
+                        var earthQuakeString = placeMark.getTweetText(earthQuakes[i]); var earthQuakeString = placeMark.getTweetText(earthQuakes[i]);
+                        if ((previousStatus.indexOf(earthQuakes[i].title) > 0) && (previousStatus.indexOf(earthQuakes[i].depth) > 0) && (previousStatus.indexOf(earthQuakes[i].magnitude.toPrecision(2)) > 0)) {
+                            indexofpreviousTweet = i;
+                        }
+                        else {
+                            i++;
+                        }
+                    }
+                    if(indexofpreviousTweet == -1)
+                    {
+                        indexofpreviousTweet = earthQuakes.length-1;ß
+                    }
+                    for (var i = indexofpreviousTweet- 1; i >= 0; i--) //for each new earthquake check to see if it was the last tweet
+                    {
+                        var earthQuakeString = placeMark.getTweetText(earthQuakes[i]);
+                        //To account for multiple apps at the same time make sure that the status is not tweeted
+                        if ((previousStatus.indexOf(earthQuakes[i].title) < 0) && (previousStatus.indexOf("Depth : " + earthQuakes[i].depth + "kilometers") < 0) && (previousStatus.indexOf(" M " + earthQuakes[i].magnitude.toPrecision(2)) < 0)) {
+                            var params = {
+                                status: placeMark.getTweetText(earthQuakes[i])
+                            };
+
+                            cb.__call(
+                                "statuses_update",
+                                params,
+                                function (reply) {
+                                    //Currently we don't need to do anything with the reply received from twitter in JSON format.
+                                    console.log(reply);
+                                }
+                            );
+
+                        }
+                    }
+                }
+            }
+        );
+    }
+
 
     document.getElementById("layer3D").onclick = layer3DSelected;
     document.getElementById("layer2D").onclick = layer2DSelected;
