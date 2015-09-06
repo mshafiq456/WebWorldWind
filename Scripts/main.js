@@ -256,8 +256,7 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
         if (indexofpreviousRecent != 0 && indexofpreviousRecent != -1) { //if the earthquakes are different check the latest tweet
 
 
-            cb.setConsumerKey("uKcQjCqAFKtJv6VRbFAk8LcK1", "WIBTA95zIhYGcAvfEJPJsVQxbaEN64aK1x2csx1wJKjqhx5xlh");
-            cb.setToken("3416857132-Fv8A8BIrbb7OGYoUODrfDb8bDvqhu1OBbusFzgj", "24qSgQIOfVBWiSudRI1GX9EivqrneqOqlG3c42gdA20Ny");
+            ///Set the keys here !
 
             cb.__call(
                 "account_verifyCredentials",
