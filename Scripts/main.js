@@ -126,7 +126,6 @@ define(['http://worldwindserver.net/webworldwind/worldwindlib.js',
         //  from our current USGS server at any given moment
         if(maxAge ==80) maxAge = 24*31;
 
-        console.log(minMag);
 
         var layerPlacemarks, layer3DGraphData;
         for (var i = 0; i < wwd.layers.length; i++) {
